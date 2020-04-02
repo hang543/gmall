@@ -1,0 +1,19 @@
+server:
+  port: 8081
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: Xiaoda5580.
+    url: jdbc:mysql://192.168.3.26:3306/guli_pms?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+  redis:
+    host: 192.168.3.26
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+  mapper-locations: classpath:mapper/pms/**/*.xml
