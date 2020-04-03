@@ -1,9 +1,11 @@
 package com.atguigu.gmall.pms.service;
 
+import com.atguigu.core.bean.Resp;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.atguigu.gmall.pms.entity.AttrEntity;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -16,5 +18,7 @@ import com.atguigu.core.bean.QueryCondition;
 public interface AttrService extends IService<AttrEntity> {
 
     PageVo queryPage(QueryCondition params);
+
+     PageVo queryAttrsById(QueryCondition queryCondition, Long cid, Integer type);
 }
 
