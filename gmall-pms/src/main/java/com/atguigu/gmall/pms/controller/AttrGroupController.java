@@ -36,7 +36,18 @@ public class AttrGroupController {
         GroupVO groupVO = this.attrGroupService.queryGroupWithAttrsByGid(gid);
         return Resp.ok(groupVO);
     }
+    @GetMapping("withattrs/cat/{catId}")
+    public Resp<List<GroupVO>>queryGroupAttrsByCid(@PathVariable("catId") Long cid){
+           List<GroupVO> groupVOS  = this.attrGroupService.queryGroupAttrsByCid(cid);
+        return Resp.ok(groupVOS);
+    }
 
+    /**
+     *  分页查询分组信息
+     * @param queryCondition
+     * @param catId
+     * @return
+     */
     @GetMapping("{catId}")
     public Resp<PageVo> queryGroupByPage(QueryCondition queryCondition, @PathVariable("catId") Long catId) {
         PageVo page = attrGroupService.queryGroupByPage(queryCondition,catId);

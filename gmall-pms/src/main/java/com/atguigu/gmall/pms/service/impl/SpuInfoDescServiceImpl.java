@@ -1,6 +1,10 @@
 package com.atguigu.gmall.pms.service.impl;
 
+import com.atguigu.gmall.pms.vo.SpuInfoVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -12,6 +16,7 @@ import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.gmall.pms.dao.SpuInfoDescDao;
 import com.atguigu.gmall.pms.entity.SpuInfoDescEntity;
 import com.atguigu.gmall.pms.service.SpuInfoDescService;
+import org.springframework.util.CollectionUtils;
 
 
 @Service("spuInfoDescService")
@@ -26,5 +31,17 @@ public class SpuInfoDescServiceImpl extends ServiceImpl<SpuInfoDescDao, SpuInfoD
 
         return new PageVo(page);
     }
+    @Override
+    public void saveSpuInfoDesc(SpuInfoVO spuInfoVo, Long spuInfoId) {
+        List<String> spuImage = spuInfoVo.getSpuImages();
+        if (!CollectionUtils.isEmpty(spuImage)) {
+            SpuInfoDescEntity descEntity = new SpuInfoDescEntity();
+            descEntity.setSpuId(spuInfoId);
+            descEntity.setDecript(StringUtils.join(spuImage, ","));
+            this.save(descEntity);
+
+        }
+    }
+
 
 }

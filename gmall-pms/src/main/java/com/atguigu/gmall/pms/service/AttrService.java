@@ -1,6 +1,7 @@
 package com.atguigu.gmall.pms.service;
 
 import com.atguigu.core.bean.Resp;
+import com.atguigu.gmall.pms.vo.AttrVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.atguigu.gmall.pms.entity.AttrEntity;
 import com.atguigu.core.bean.PageVo;
@@ -20,5 +21,7 @@ public interface AttrService extends IService<AttrEntity> {
     PageVo queryPage(QueryCondition params);
 
      PageVo queryAttrsById(QueryCondition queryCondition, Long cid, Integer type);
+
+    void saveArrt(AttrVo attr);
 }
 
