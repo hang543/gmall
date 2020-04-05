@@ -10,6 +10,7 @@ import com.atguigu.gmall.pms.vo.BaseAttrVO;
 import com.atguigu.gmall.sms.SkuSaleVO;
 import com.atguigu.gmall.pms.vo.SkuinfoVO;
 import com.atguigu.gmall.pms.vo.SpuInfoVO;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         );
         return new PageVo(page);
     }
-
+    @GlobalTransactional(name = "fsp_tx_group" ,rollbackFor = Exception.class)
     @Override
     public void bigSave(SpuInfoVO spuInfoVo) {
         /**
@@ -91,6 +92,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         this.saveSpuInfoDesc.saveSpuInfoDesc(spuInfoVo, spuInfoId);
         //******************
         saveBaseAttrVlue(spuInfoVo, spuInfoId);
+
 
         saveSkuAndSale(spuInfoVo, spuInfoId);
 
@@ -128,6 +130,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                     return skuImagesEntity;
                 }).collect(Collectors.toList());
                 this.skuImagesService.saveBatch(skuImagesEntities);
+
+
             }
             //*********************3*************************************
             List<SkuSaleAttrValueEntity> saleAttrs = skuinfoVO.getSaleAttrs();

@@ -16,6 +16,7 @@ import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.gmall.pms.dao.SpuInfoDescDao;
 import com.atguigu.gmall.pms.entity.SpuInfoDescEntity;
 import com.atguigu.gmall.pms.service.SpuInfoDescService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 
@@ -32,6 +33,7 @@ public class SpuInfoDescServiceImpl extends ServiceImpl<SpuInfoDescDao, SpuInfoD
         return new PageVo(page);
     }
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void saveSpuInfoDesc(SpuInfoVO spuInfoVo, Long spuInfoId) {
         List<String> spuImage = spuInfoVo.getSpuImages();
         if (!CollectionUtils.isEmpty(spuImage)) {
