@@ -124,6 +124,7 @@ public class SearchServiceImpl implements SearchService {
         CopyOnWriteArrayList<Goods> goosList = new CopyOnWriteArrayList<>();
         for (SearchHit hit : hits) {
             Goods goods = JSONUtil.toBean(hit.getSourceAsString(), Goods.class);
+            goods.setTitle(hit.getHighlightFields().get("title").getFragments()[0].toString());
             goosList.add(goods);
         }
         responseVo.setProducts(goosList);
@@ -259,6 +260,8 @@ public class SearchServiceImpl implements SearchService {
                         .subAggregation(AggregationBuilders.terms("attrNameAgg").field("attrs.attrName"))
                         .subAggregation(AggregationBuilders.terms("attrValueAgg").field("attrs.attrValue"))));
         System.out.println(searchSourceBuilder.toString());
+        //结果集过滤
+        searchSourceBuilder.fetchSource(new String[]{"skuId","title","price","pic"},null);
 
 
         //查询参数
