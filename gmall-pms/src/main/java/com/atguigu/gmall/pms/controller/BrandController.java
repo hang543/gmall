@@ -52,8 +52,15 @@ public class BrandController {
     @ApiOperation("详情查询")
     @GetMapping("/info/{brandId}")
     @PreAuthorize("hasAuthority('pms:brand:info')")
-    public Resp<BrandEntity> info(@PathVariable("brandId") Long brandId){
+    public Resp<BrandEntity> queryBrandById(@PathVariable("brandId") Long brandId){
 		BrandEntity brand = brandService.getById(brandId);
+
+        return Resp.ok(brand);
+    }
+
+    @GetMapping("brand/info2/{brandId}")
+    public Resp<BrandEntity> info(@PathVariable("brandId") Long brandId){
+        BrandEntity brand = brandService.getById(brandId);
 
         return Resp.ok(brand);
     }

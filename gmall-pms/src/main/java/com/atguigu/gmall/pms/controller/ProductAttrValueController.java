@@ -1,6 +1,7 @@
 package com.atguigu.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -17,8 +18,6 @@ import com.atguigu.gmall.pms.entity.ProductAttrValueEntity;
 import com.atguigu.gmall.pms.service.ProductAttrValueService;
 
 
-
-
 /**
  * spu属性值
  *
@@ -32,6 +31,13 @@ import com.atguigu.gmall.pms.service.ProductAttrValueService;
 public class ProductAttrValueController {
     @Autowired
     private ProductAttrValueService productAttrValueService;
+
+    @GetMapping("{spuId}")
+    public Resp<List<ProductAttrValueEntity>> querySearchAttrValueBySpuId(@PathVariable("spuId") Long spuId) {
+        List<ProductAttrValueEntity> searchAttrValue = this.productAttrValueService.querySearchAttrValueBySpuId(spuId);
+        return Resp.ok(searchAttrValue);
+
+    }
 
     /**
      * 列表
@@ -52,8 +58,8 @@ public class ProductAttrValueController {
     @ApiOperation("详情查询")
     @GetMapping("/info/{id}")
     @PreAuthorize("hasAuthority('pms:productattrvalue:info')")
-    public Resp<ProductAttrValueEntity> info(@PathVariable("id") Long id){
-		ProductAttrValueEntity productAttrValue = productAttrValueService.getById(id);
+    public Resp<ProductAttrValueEntity> info(@PathVariable("id") Long id) {
+        ProductAttrValueEntity productAttrValue = productAttrValueService.getById(id);
 
         return Resp.ok(productAttrValue);
     }
@@ -64,8 +70,8 @@ public class ProductAttrValueController {
     @ApiOperation("保存")
     @PostMapping("/save")
     @PreAuthorize("hasAuthority('pms:productattrvalue:save')")
-    public Resp<Object> save(@RequestBody ProductAttrValueEntity productAttrValue){
-		productAttrValueService.save(productAttrValue);
+    public Resp<Object> save(@RequestBody ProductAttrValueEntity productAttrValue) {
+        productAttrValueService.save(productAttrValue);
 
         return Resp.ok(null);
     }
@@ -76,8 +82,8 @@ public class ProductAttrValueController {
     @ApiOperation("修改")
     @PostMapping("/update")
     @PreAuthorize("hasAuthority('pms:productattrvalue:update')")
-    public Resp<Object> update(@RequestBody ProductAttrValueEntity productAttrValue){
-		productAttrValueService.updateById(productAttrValue);
+    public Resp<Object> update(@RequestBody ProductAttrValueEntity productAttrValue) {
+        productAttrValueService.updateById(productAttrValue);
 
         return Resp.ok(null);
     }
@@ -88,8 +94,8 @@ public class ProductAttrValueController {
     @ApiOperation("删除")
     @PostMapping("/delete")
     @PreAuthorize("hasAuthority('pms:productattrvalue:delete')")
-    public Resp<Object> delete(@RequestBody Long[] ids){
-		productAttrValueService.removeByIds(Arrays.asList(ids));
+    public Resp<Object> delete(@RequestBody Long[] ids) {
+        productAttrValueService.removeByIds(Arrays.asList(ids));
 
         return Resp.ok(null);
     }
