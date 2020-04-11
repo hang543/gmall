@@ -34,4 +34,47 @@ public class IndexController {
         List<CategoryVO> categoryVOList=this.indexService.querySubCategories(pid);
         return Resp.ok(categoryVOList);
     }
+    @GetMapping("testlock")
+    public Resp<Object> testLock(){
+        indexService.testLock();
+
+        return Resp.ok(null);
+    }
+    @GetMapping("read")
+    public Resp<String> read(){
+        String msg = indexService.readLock();
+
+        return Resp.ok(msg);
+    }
+
+    @GetMapping("write")
+    public Resp<String> write(){
+        String msg = indexService.writeLock();
+
+        return Resp.ok(msg);
+    }
+
+    /**
+     * 等待
+     * @return
+     */
+    @GetMapping("latch")
+    public Resp<Object> countDownLatch() throws InterruptedException {
+
+        String msg = indexService.latch();
+
+        return Resp.ok(msg);
+    }
+
+    /**
+     * 计数
+     * @return
+     */
+    @GetMapping("out")
+    public Resp<Object> out(){
+
+        String msg = indexService.countDown();
+
+        return Resp.ok(msg);
+    }
 }
