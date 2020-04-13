@@ -4,6 +4,8 @@ import com.atguigu.gmall.pms.entity.BrandEntity;
 import com.atguigu.gmall.pms.entity.CategoryEntity;
 import com.atguigu.gmall.pms.entity.SkuImagesEntity;
 import com.atguigu.gmall.pms.entity.SkuSaleAttrValueEntity;
+import com.atguigu.gmall.pms.entity.vo.ItemGroupVo;
+import com.atguigu.gmall.vo.SaleVo;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -29,7 +31,7 @@ public class ItemVo {
     private BigDecimal weight;
 
     private List<SkuImagesEntity> pice;
-    private List<SkuSaleVo> sales;
+    private List<SaleVo> sales;
 
     private Boolean store;
 

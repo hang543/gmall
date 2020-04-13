@@ -1,13 +1,15 @@
 package com.atguigu.gmall.sms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 
 
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
 
-import com.atguigu.gmall.sms.SkuSaleVO;
+import com.atguigu.gmall.vo.SaleVo;
+import com.atguigu.gmall.vo.SkuSaleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,11 @@ public class SkuBoundsController {
     public Resp<Object> saveSale(@RequestBody SkuSaleVO skuSaleVO) {
         skuBoundsService.saveSale(skuSaleVO);
         return Resp.ok(null);
+    }
+    @GetMapping("{skuId}")
+    public Resp<List<SaleVo>> querySalesBySkuId(@PathVariable("skuId")Long skuId){
+        List<SaleVo> saleVos=  this.skuBoundsService.querySalesBySkuId(skuId);
+        return Resp.ok(saleVos);
     }
 
     /**

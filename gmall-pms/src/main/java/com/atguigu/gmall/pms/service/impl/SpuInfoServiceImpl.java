@@ -1,13 +1,12 @@
 package com.atguigu.gmall.pms.service.impl;
 
-import com.atguigu.gmall.pms.dao.ProductAttrValueDao;
 import com.atguigu.gmall.pms.dao.SkuInfoDao;
 import com.atguigu.gmall.pms.dao.SpuInfoDescDao;
 import com.atguigu.gmall.pms.entity.*;
 import com.atguigu.gmall.pms.feign.GmallSmsClients;
 import com.atguigu.gmall.pms.service.*;
 import com.atguigu.gmall.pms.vo.BaseAttrVO;
-import com.atguigu.gmall.sms.SkuSaleVO;
+import com.atguigu.gmall.vo.SkuSaleVO;
 import com.atguigu.gmall.pms.vo.SkuinfoVO;
 import com.atguigu.gmall.pms.vo.SpuInfoVO;
 import io.seata.spring.annotation.GlobalTransactional;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 

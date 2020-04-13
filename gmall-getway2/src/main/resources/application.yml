@@ -46,20 +46,36 @@ spring:
               - Path=/api/index/**
           filters:
             - RewritePath=/api(?<segment>/?.*), $\{segment}
+         
 
         - id: index-route
           uri: lb://item-service
           predicates:
-            - Path=/api/index/**
+            - Path=/api/item/**
           filters:
-            - RewritePath=/api(?<segment>/?.*), $\{segment}
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+
 
         - id: search-route
           uri: lb://search-service
           predicates:
-            - Path=/search/**
+            - Path=/api/search/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+
+        - id: auth-service # 授权中心
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
 
 
     nacos:
       discovery:
         server-addr: localhost:8848
+
+gmall:
+  jwt:
+    pubKeyPath: I:\\rsa\\rsa.pub # 公钥地址
+    cookieName: GMALL_TOKEN

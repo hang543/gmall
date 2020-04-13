@@ -1,4 +1,4 @@
-package com.atguigu.gmall.item.vo;
+package com.atguigu.gmall.pms.entity.vo;
 
 import com.atguigu.gmall.pms.entity.ProductAttrValueEntity;
 import lombok.Data;

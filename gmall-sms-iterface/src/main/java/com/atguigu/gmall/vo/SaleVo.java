@@ -1,4 +1,4 @@
-package com.atguigu.gmall.item.vo;
+package com.atguigu.gmall.vo;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import lombok.Data;
  * @Content:
  **/
 @Data
-public class SkuSaleVo {
+public class SaleVo {
     private String type;
     private String desc;
 }

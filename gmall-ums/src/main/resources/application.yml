@@ -1,0 +1,28 @@
+server:
+  port: 8082
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: Xiaoda5580.
+    url: jdbc:mysql://192.168.3.26:3306/guli_ums?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+  redis:
+    host: 192.168.3.26
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto
+  mapper-locations: classpath:mapper/ums/**/*.xml
+
+gmall:
+  jwt:
+    pubKeyPath: I:\\rsa\\rsa.pub # 公钥地址
+    priKeyPath: I:\\rsa\\rsa.pri # 私钥地址
+    secret: sf3423jsdf#3$@FDS32
+    expire: 180 # 过期时间,单位分钟
+    cookieName: GMALL_TOKEN
