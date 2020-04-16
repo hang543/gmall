@@ -4,14 +4,11 @@ import cn.hutool.core.util.IdUtil;
 import com.atguigu.core.utils.CookieUtils;
 import com.atguigu.core.utils.JwtUtils;
 import com.atguigu.gmall.cart.config.JwtProperties;
-import com.atguigu.gmall.cart.pojo.UserInfo;
-import com.sun.corba.se.impl.resolver.SplitLocalResolverImpl;
+import com.atguigu.core.bean.UserInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
