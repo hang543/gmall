@@ -22,7 +22,7 @@ public class RabbitMqConfig {
         Map<String, Object> map = new ConcurrentHashMap<>(3);
         map.put("x-dead-letter-exchange", "GMALL-ORDER-EXCHANGE");
         map.put("x-dead-letter-routing-key", "stock.unlock");
-        map.put("x-message-ttl", 90000);
+        map.put("x-message-ttl", 9000000);
         return new Queue("WMS-TTL-QUEUE", true, false, false, map);
     }
 

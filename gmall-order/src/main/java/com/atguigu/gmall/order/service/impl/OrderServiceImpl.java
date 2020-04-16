@@ -63,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private AmqpTemplate amqpTemplate;
 
-    private static final String TOKEN_PREFIX="order:token:";
+    private static final String TOKEN_PREFIX = "order:token:";
 
     @Override
     public OrderConfirmVO confirm() {
@@ -148,27 +148,27 @@ public class OrderServiceImpl implements OrderService {
             Snowflake snowflake = IdUtil.createSnowflake(1, 1);
             long id = snowflake.nextId();
             confirmVO.setOrderToken(String.valueOf(id));
-            this.stringRedisTemplate.opsForValue().set(TOKEN_PREFIX+id,String.valueOf(id));
+            this.stringRedisTemplate.opsForValue().set(TOKEN_PREFIX + id, String.valueOf(id));
         }, threadPoolExecutor);
-        CompletableFuture.allOf(addressCompletableFuture,skuBigCompletableFuture,idCompletableFuture).join();
+        CompletableFuture.allOf(addressCompletableFuture, skuBigCompletableFuture, idCompletableFuture).join();
         return confirmVO;
     }
 
     @Override
-    public void submit(OrderSubmitVO orderSubmitVO) {
+    public OrderEntity submit(OrderSubmitVO orderSubmitVO) {
         UserInfo userInfo = LoginInterceptor.getUserInfo();
         String orderToken = orderSubmitVO.getOrderToken();
         //1.防重复提交 查询redis有没有 有则是第一次，放行 并删除redis中token
-        String script="if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
-        Long flag = this.stringRedisTemplate.execute(new DefaultRedisScript<>(script,Long.class), Arrays.asList(TOKEN_PREFIX + orderToken), orderToken);
+        String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+        Long flag = this.stringRedisTemplate.execute(new DefaultRedisScript<>(script, Long.class), Arrays.asList(TOKEN_PREFIX + orderToken), orderToken);
 
-        if (flag==0){
-            throw  new OrderException("订单不可重复提交");
+        if (flag == 0) {
+            throw new OrderException("订单不可重复提交");
         }
         //2.校验总价格，总价一致放行
-        List<OrderItemVO> items=orderSubmitVO.getItems();
-        BigDecimal totalPrice=orderSubmitVO.getTotalPrice();
-        if (CollectionUtil.isEmpty(items)){
+        List<OrderItemVO> items = orderSubmitVO.getItems();
+        BigDecimal totalPrice = orderSubmitVO.getTotalPrice();
+        if (CollectionUtil.isEmpty(items)) {
             throw new OrderException("没有勾选商品，倾倒购物车中勾选");
         }
         BigDecimal currentTotalPrice = items.stream().map(item -> {
@@ -180,8 +180,8 @@ public class OrderServiceImpl implements OrderService {
             return new BigDecimal(0);
 
         }).reduce((a, b) -> a.add(b)).get();
-        if (currentTotalPrice.compareTo(totalPrice)!=0){
-             throw new OrderException("页面已过期，其刷新后再试");
+        if (currentTotalPrice.compareTo(totalPrice) != 0) {
+            throw new OrderException("页面已过期，其刷新后再试");
         }
 
 
@@ -194,30 +194,35 @@ public class OrderServiceImpl implements OrderService {
             return skuLockVO;
         }).collect(Collectors.toList());
         Resp<Object> wareResp = this.gmallWmsClient.checkAndLockStore(lockVOS);
-        if (wareResp.getCode()!=0){
+        if (wareResp.getCode() != 0) {
             throw new OrderException(wareResp.getMsg());
         }
 
         //4.下单
         orderSubmitVO.setUserId(userInfo.getId());
+        Resp<OrderEntity> orderEntityResp = null;
         try {
-            Resp<OrderEntity> orderEntityResp = this.gmallOmsClient.saveOrder(orderSubmitVO);
+            orderEntityResp = this.gmallOmsClient.saveOrder(orderSubmitVO);
             OrderEntity orderEntity = orderEntityResp.getData();
         } catch (Exception e) {
             e.printStackTrace();
             //发送消息给wms,解锁对应的库存
-            this.amqpTemplate.convertAndSend("GMALL-ORDER-EXCHANGE","stock.unlock",orderToken);
+            this.amqpTemplate.convertAndSend("GMALL-ORDER-EXCHANGE", "stock.unlock", orderToken);
             throw new OrderException("服务器错误，创建订单失败");
         }
-        int i=1/0;
+
 
         //5.删除购物车
-        Map<String,Object>map=new ConcurrentHashMap<>(16);
-        map.put("userId",userInfo.getId());
+        Map<String, Object> map = new ConcurrentHashMap<>(16);
+        map.put("userId", userInfo.getId());
         List<Long> skuIds = items.stream().map(OrderItemVO::getSkuId).collect(Collectors.toList());
-        map.put("skuIds",skuIds);
-        this.amqpTemplate.convertAndSend("GMALL-ORDER-EXCHANGE","cart.delete",map);
+        map.put("skuIds", skuIds);
+        this.amqpTemplate.convertAndSend("GMALL-ORDER-EXCHANGE", "cart.delete", map);
 
+        if (orderEntityResp != null) {
+            return orderEntityResp.getData();
+        }
+        return null;
 
     }
 }
